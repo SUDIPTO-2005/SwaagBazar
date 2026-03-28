@@ -331,51 +331,58 @@
     </div>
 
     <script>
-        var options = {
-    "key": "{{ razorpay_key_id }}",
-    "amount": "{{ amount }}",
-    "currency": "{{ currency }}",
-    "name": "SwaagBazar",
-    "description": "Order Payment",
-    "order_id": "{{ razorpay_order_id }}",
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": "{{ amount }}",
+        "currency": "{{ currency }}",
+        "name": "SwaagBazar",
+        "description": "Order Payment",
+        "order_id": "{{ razorpay_order_id }}",
 
-    // ❌ REMOVE redirect
-    // "redirect": true,
+        // ✅ IMPORTANT: handler instead of redirect
+        "handler": function (response) {
+            console.log("Payment Success:", response);
 
-    // ✅ USE HANDLER
-    "handler": function (response) {
-        console.log(response);
-
-        // Send data to Django manually
-        fetch("/shop/handlerequest/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: new URLSearchParams({
-                "razorpay_payment_id": response.razorpay_payment_id,
-                "razorpay_order_id": response.razorpay_order_id,
-                "razorpay_signature": response.razorpay_signature
+            fetch("/shop/handlerequest/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                    "razorpay_payment_id": response.razorpay_payment_id,
+                    "razorpay_order_id": response.razorpay_order_id,
+                    "razorpay_signature": response.razorpay_signature
+                })
             })
-        })
-        .then(res => res.text())
-        .then(data => {
-            // Redirect after success
-            window.location.href = "/shop/";
-        });
-    },
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+                alert("Payment Successful ✅");
+                window.location.href = "/shop/";
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Payment processed but error occurred");
+            });
+        },
 
-    "prefill": {
-        "name": "{{ order.name }}",
-        "email": "{{ order.email }}",
-        "contact": "{{ order.phone }}"
-    },
+        "prefill": {
+            "name": "{{ order.name }}",
+            "email": "{{ order.email }}",
+            "contact": "{{ order.phone }}"
+        },
 
-    "theme": {
-        "color": "rgb(52, 58, 64)"
-    }
-};
-    </script>
+        "theme": {
+            "color": "rgb(52, 58, 64)"
+        }
+    };
 
+    var rzp1 = new Razorpay(options);
+
+    document.getElementById("rzp-button1").onclick = function(e) {
+        e.preventDefault();
+        rzp1.open();   // 🔥 THIS LINE IS IMPORTANT
+    };
+</script>
 </body>
 </html>
