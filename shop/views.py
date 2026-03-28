@@ -11,34 +11,19 @@ from math import ceil
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 
-# def index(request):
-#     products = Product.objects.all()
-#     allProd = []
-#     catprods = Product.objects.values('category', 'id')
-#     cats = {item['category'] for item in catprods}
-#     for cat in cats:
-#         prod = Product.objects.filter(category=cat)
-#         n = len(prod)
-#         nSlides = n // 4 + ceil((n / 4) - (n // 4))
-#         allProd.append([prod, range(1, nSlides), nSlides])
-#     params = {'allProds': allProd}
-#     return render(request, 'shop/index1.html', params)
-from django.http import HttpResponse
-from .models import Product
-
 def index(request):
-    return HttpResponse(f"Product count = {Product.objects.count()}")
-from django.http import HttpResponse
-from django.core.management import call_command
-from .models import Product
+    products = Product.objects.all()
+    allProd = []
+    catprods = Product.objects.values('category', 'id')
+    cats = {item['category'] for item in catprods}
+    for cat in cats:
+        prod = Product.objects.filter(category=cat)
+        n = len(prod)
+        nSlides = n // 4 + ceil((n / 4) - (n // 4))
+        allProd.append([prod, range(1, nSlides), nSlides])
+    params = {'allProds': allProd}
+    return render(request, 'shop/index1.html', params)
 
-def load_shop_data(request):
-    try:
-        call_command("loaddata", "shop_data.json", verbosity=2)
-        return HttpResponse(f"Loaded. Count = {Product.objects.count()}")
-    except Exception as e:
-        return HttpResponse(f"ERROR: {str(e)}")
-    
 def searchMatch(query, item):
     if query in item.prod_name.lower or query in item.category.lower:
         return True
