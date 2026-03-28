@@ -1,0 +1,115 @@
+{% extends 'shop/basic.html' %}
+{% block title %}SwaagBazar Tracker{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="col my-4">
+        <h2>Enter your Order Id and Email address to track your order</h2>
+
+        <form method="post" id="trackerForm">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Order Id</label>
+                    <input type="text" class="form-control" id="orderId" name="orderId">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Email</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Track Order</button>
+        </form>
+    </div>
+
+    <div class="col my-4">
+        <h2>Your Order Status</h2>
+        <ul class="list-group" id="items">
+            <li class="list-group-item">
+                Enter your Order Id and Email to track your order
+            </li>
+        </ul>
+
+        <h2 class="mt-4">Your Order Details</h2>
+        <ul class="list-group" id="citems"></ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$('#trackerForm').submit(function(event) {
+    event.preventDefault();
+
+    // clear previous data
+    $('#items').empty();
+    $('#citems').empty();
+
+    let formData = {
+        'orderId': $('#orderId').val(),
+        'email': $('#email').val(),
+        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/shop/tracker/',
+        data: formData,
+    })
+    .done(function(data) {
+
+        // convert string → JSON if needed
+        let response = (typeof data === "string") ? JSON.parse(data) : data;
+
+        if (response.status === 'success') {
+
+            // ===== ORDER UPDATES =====
+            let updates = response.updates;
+
+            if (updates.length > 0) {
+                updates.forEach(function(update) {
+                    $('#items').append(`
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            ${update.text}
+                            <span class="badge bg-primary rounded-pill">${update.time}</span>
+                        </li>
+                    `);
+                });
+            } else {
+                $('#items').append(`
+                    <li class="list-group-item">No order updates available.</li>
+                `);
+            }
+
+            // ===== ORDER ITEMS =====
+            let cart = JSON.parse(response.itemsJson);
+
+            for (let item in cart) {
+                $('#citems').append(`
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${cart[item][1]}
+                        <span class="badge bg-primary rounded-pill">${cart[item][0]}</span>
+                    </li>
+                `);
+            }
+
+        } else {
+            $('#items').append(`
+                <li class="list-group-item">
+                    Order not found. Please check Order Id & Email.
+                </li>
+            `);
+        }
+    })
+    .fail(function() {
+        $('#items').append(`
+            <li class="list-group-item text-danger">
+                Error fetching order details.
+            </li>
+        `);
+    });
+});
+</script>
+{% endblock %}

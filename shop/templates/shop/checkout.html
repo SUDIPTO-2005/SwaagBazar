@@ -1,0 +1,278 @@
+{% extends 'shop/basic.html' %}
+{% block title %}Checkout - SwaagBazar{% endblock %}
+
+{% block css %}
+<style>
+    body {
+        background: #f5f7fb;
+    }
+
+    .checkout-section {
+        padding: 20px 0 35px;
+    }
+
+    .checkout-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.07);
+        padding: 22px;
+        margin-bottom: 24px;
+    }
+
+    .checkout-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 18px;
+    }
+
+    .cart-list .list-group-item {
+        border-radius: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #edf1f7;
+        padding: 14px 16px;
+        font-size: 0.98rem;
+    }
+
+    .summary-box {
+        background: #f8fbff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-top: 15px;
+        font-size: 1rem;
+        color: #1f2937;
+    }
+
+    .summary-box b {
+        color: #0d6efd;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        min-height: 46px;
+        border: 1px solid #d7dce2;
+        box-shadow: none;
+    }
+
+    .form-control:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.12);
+    }
+
+    .place-order-btn {
+        width: 100%;
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-top: 8px;
+    }
+
+    .empty-cart {
+        background: #fff3cd;
+        border: 1px solid #ffe69c;
+        color: #664d03;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin-bottom: 0;
+    }
+
+    .qty-badge {
+        background: #0d6efd;
+        color: #fff;
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    @media (max-width: 991.98px) {
+        .checkout-title {
+            font-size: 1.25rem;
+        }
+
+        .checkout-card {
+            padding: 18px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .checkout-section {
+            padding: 14px 0 24px;
+        }
+
+        .checkout-card {
+            padding: 16px;
+            border-radius: 14px;
+        }
+
+        .checkout-title {
+            font-size: 1.12rem;
+            line-height: 1.5;
+        }
+
+        .cart-list .list-group-item {
+            padding: 12px 14px;
+            font-size: 0.95rem;
+        }
+
+        .summary-box {
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            min-height: 44px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .container {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .checkout-title {
+            font-size: 1.02rem;
+        }
+
+        .place-order-btn {
+            font-size: 0.95rem;
+            padding: 11px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container checkout-section">
+    <div class="row">
+        <div class="col-12 col-lg-5">
+            <div class="checkout-card">
+                <h2 class="checkout-title">Step 1 - Review Your Cart Items</h2>
+
+                <div class="cart-list">
+                    <ul class="list-group" id="items"></ul>
+                </div>
+
+                <div class="summary-box">
+                    Your Cart Total Is <b>Rs. <span id="totalPrice"></span></b><br>
+                    <small>Thanks for shopping with .</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-7">
+            <div class="checkout-card">
+                <h2 class="checkout-title">Step 2 - Enter Address & Other Details</h2>
+
+                <form method="post" action="/shop/checkout/">
+                    {% csrf_token %}
+                    <input type="hidden" name="itemsJson" id="itemsJson">
+                    <input type="hidden" name="amount" id="amount">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="address1" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="address2" class="form-label">Address Line 2</label>
+                        <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment, studio, or floor">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" name="city" placeholder="Enter city">
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label for="state" class="form-label">State</label>
+                            <input type="text" class="form-control" id="state" name="state" placeholder="Enter state">
+                        </div>
+
+                        <div class="form-group col-md-2 mb-3">
+                            <label for="zip_code" class="form-label">Zip</label>
+                            <input type="text" class="form-control" id="zip_code" name="zip_code" placeholder="Zip">
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary place-order-btn">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+
+console.log(cart);
+
+var sum = 0;
+var totalPrice = 0;
+
+if ($.isEmptyObject(cart)) {
+    let mystr = `<div class="empty-cart">Your cart is empty, please add some items before checking out.</div>`;
+    $('#items').append(mystr);
+} else {
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        let itemPrice = cart[item][2];
+
+        sum = sum + qty;
+        totalPrice = totalPrice + qty * itemPrice;
+
+        let mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>${name}</span>
+                        <span class="qty-badge">${qty}</span>
+                    </li>`;
+        $('#items').append(mystr);
+    }
+}
+
+if (document.getElementById('cart')) {
+    document.getElementById('cart').innerHTML = sum;
+}
+document.getElementById('totalPrice').innerHTML = totalPrice;
+$('#itemsJson').val(JSON.stringify(cart));
+
+{% if thank %}
+alert('Thanks for ordering with us. Your order id is {{id}}. Use it to track your order using our order tracker.');
+localStorage.clear();
+document.location = "/shop";
+{% endif %}
+
+$('#amount').val($('#totalPrice').html());
+</script>
+{% endblock %}

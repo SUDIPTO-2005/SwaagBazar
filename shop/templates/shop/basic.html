@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <style>
+        .logo-animated {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ff6a00, #ffcc00, #28a745, #0d6efd);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 4s ease infinite;
+            text-decoration: none !important;
+            display: inline-block;
+        }
+
+        .logo-animated:hover {
+            text-shadow: 0 0 10px rgba(255, 106, 0, 0.35);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+        }
+
+        #popcart {
+            white-space: nowrap;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar .form-inline {
+                margin-top: 10px;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
+            .navbar .form-inline input {
+                width: 100%;
+                margin-bottom: 10px;
+                margin-right: 0 !important;
+            }
+
+            .navbar .form-inline button {
+                width: 100%;
+            }
+
+            #popcart {
+                width: 100%;
+                margin: 10px 0 0 0 !important;
+            }
+        }
+
+        {% block css %}
+        {% endblock %}
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand logo-animated" href="/shop">🛒 SwaagBazar</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/shop">Home <span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/about">About Us</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/tracker">Tracker</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/contact">Contact Us</a>
+            </li>
+        </ul>
+
+        <form method="get" action="/shop/search/" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+        <button
+            type="button"
+            class="btn btn-secondary mx-2"
+            id="popcart"
+            data-container="body"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-html="true"
+            data-content="Your cart is empty."
+        >
+            Cart(<span id="cart">0</span>)
+        </button>
+    </div>
+</nav>
+
+{% block body %}{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+{% block js %}{% endblock %}
+</body>
+</html>

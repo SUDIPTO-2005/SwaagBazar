@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f1f3f6;
+        }
+
+        .navbar {
+            background-color: rgb(52, 58, 64);
+            color: white;
+            padding: 14px 20px;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .success-box {
+            background: #fff;
+            width: 100%;
+            max-width: 750px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .top-section {
+            background: #e8f5e9;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .top-section h2 {
+            margin: 10px 0;
+            color: #2e7d32;
+            font-size: 28px;
+        }
+
+        .top-section p {
+            margin: 0;
+            color: #555;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .check-icon {
+            font-size: 55px;
+            color: #2e7d32;
+            line-height: 1;
+        }
+
+        .bottom-section {
+            padding: 25px 20px;
+        }
+
+        .detail-row {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+            word-break: break-word;
+        }
+
+        .label {
+            font-weight: bold;
+            min-width: 130px;
+            display: inline-block;
+        }
+
+        .button-area {
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .button-area a {
+            text-decoration: none;
+            background: rgb(52, 58, 64);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .button-area a:hover {
+            background: rgb(33, 37, 41);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                font-size: 20px;
+                padding: 12px 15px;
+            }
+
+            .container {
+                margin: 20px auto;
+                padding: 0 12px;
+            }
+
+            .top-section {
+                padding: 25px 15px;
+            }
+
+            .top-section h2 {
+                font-size: 24px;
+            }
+
+            .top-section p {
+                font-size: 15px;
+            }
+
+            .check-icon {
+                font-size: 48px;
+            }
+
+            .bottom-section {
+                padding: 20px 15px;
+            }
+
+            .detail-row {
+                font-size: 15px;
+            }
+
+            .label {
+                display: block;
+                min-width: auto;
+                margin-bottom: 4px;
+            }
+
+            .button-area a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                font-size: 18px;
+            }
+
+            .top-section h2 {
+                font-size: 21px;
+            }
+
+            .top-section p {
+                font-size: 14px;
+            }
+
+            .check-icon {
+                font-size: 42px;
+            }
+
+            .detail-row {
+                font-size: 14px;
+            }
+
+            .button-area a {
+                padding: 11px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        SwaagBazar
+    </div>
+
+    <div class="container">
+        <div class="success-box">
+            <div class="top-section">
+                <div class="check-icon">✔</div>
+                <h2>Payment Successful</h2>
+                <p>Your order has been placed successfully.</p>
+            </div>
+
+            <div class="bottom-section">
+                <div class="detail-row">
+                    <span class="label">Order ID:</span> {{ order.ord_id }}
+                </div>
+
+                <div class="detail-row">
+                    <span class="label">Payment ID:</span> {{ order.razorpay_payment_id }}
+                </div>
+
+                <div class="button-area">
+                    <a href="/shop/">Go to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

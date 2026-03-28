@@ -1,0 +1,521 @@
+{% extends 'shop/basic.html' %}
+
+{% block css %}
+<style>
+    body {
+        background: #f6f8fb;
+    }
+
+    .shop-wrapper {
+        padding: 18px 0 30px 0;
+    }
+
+    .section-heading {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 10px 0 18px 0;
+        padding-left: 6px;
+        border-left: 5px solid #0d6efd;
+    }
+
+    .carousel-box {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 14px 10px 18px 10px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+        margin-bottom: 28px;
+    }
+
+    .carousel-inner {
+        padding: 8px 34px 16px 34px;
+    }
+
+    .product-item {
+        margin-bottom: 22px;
+    }
+    .logo-gradient {
+    font-size: 26px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ff6a00, #ffcc00, #28a745);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    }
+    .product-card {
+        height: 100%;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+    }
+
+    .product-image-wrap {
+    background: linear-gradient(180deg, #f8fafc, #eef2f7);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+}
+
+    .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    display: block;
+}
+
+    .product-card .card-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .product-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1f2937;
+        line-height: 1.4;
+        margin: 0;
+        min-height: 46px;
+    }
+
+    .product-price {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0d6efd;
+        margin: 0;
+    }
+
+    .product-desc {
+        font-size: 0.92rem;
+        color: #6b7280;
+        line-height: 1.5;
+        margin: 0;
+        min-height: 44px;
+    }
+
+    .btn-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    .btn-row .btn,
+    .btn-row span,
+    .btn-row a {
+        width: 100%;
+    }
+
+    .btn-cart,
+    .btn-view {
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 0.94rem;
+        font-weight: 600;
+    }
+
+    .btn-cart {
+        background: #0d6efd;
+        border: none;
+    }
+
+    .btn-cart:hover {
+        background: #0b5ed7;
+    }
+
+    .btn-view {
+        border: 1px solid #0d6efd;
+        color: #0d6efd;
+        background: #fff;
+    }
+
+    .btn-view:hover {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    .qty-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .qty-box .btn {
+        min-width: 40px;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    .qty-count {
+        min-width: 28px;
+        text-align: center;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .carousel-indicators {
+        bottom: -8px;
+    }
+
+    .carousel-indicators li {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #b6c3d1;
+    }
+
+    .carousel-indicators .active {
+        background-color: #0d6efd;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 42px;
+        opacity: 1;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: rgba(13, 110, 253, 0.92);
+        border-radius: 50%;
+        padding: 18px;
+        background-size: 55% 55%;
+    }
+
+    .popover {
+        max-width: 340px;
+        width: 92vw;
+        border-radius: 14px;
+        border: none;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+    }
+
+    .popover-header {
+        background: #0d6efd;
+        color: #fff;
+        border-top-left-radius: 14px;
+        border-top-right-radius: 14px;
+    }
+
+    .empty-cart-text {
+        color: #6b7280;
+        font-size: 0.92rem;
+    }
+
+    @media (max-width: 991.98px) {
+        .carousel-inner {
+            padding: 8px 18px 16px 18px;
+        }
+
+        .product-card img {
+            height: 210px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .shop-wrapper {
+            padding-top: 10px;
+        }
+
+        .section-heading {
+            font-size: 1.08rem;
+            margin-bottom: 14px;
+        }
+
+        .carousel-box {
+            border-radius: 16px;
+            padding: 10px 6px 14px 6px;
+        }
+
+        .carousel-inner {
+            padding: 6px 6px 14px 6px;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            display: none;
+        }
+
+        .product-card {
+            border-radius: 14px;
+        }
+
+        .product-card img {
+            height: 190px;
+        }
+
+        .product-card .card-body {
+            padding: 14px;
+        }
+
+        .product-name,
+        .product-desc {
+            min-height: auto;
+        }
+
+        .btn-row {
+            grid-template-columns: 1fr;
+        }
+
+        .btn-cart,
+        .btn-view {
+            font-size: 0.92rem;
+            padding: 9px 10px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .container {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .product-card img {
+            height: 175px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container shop-wrapper">
+    {% for product, range, nSlides in allProds %}
+        <h4 class="section-heading">
+            {{ product.0.category }} Collection
+        </h4>
+
+        <div class="carousel-box">
+            <div id="demo{{ forloop.counter }}" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    <li data-target="#demo{{ forloop.counter }}" data-slide-to="0" class="active"></li>
+                    {% for i in range %}
+                        <li data-target="#demo{{ forloop.parentloop.counter }}" data-slide-to="{{ i }}"></li>
+                    {% endfor %}
+                </ul>
+
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            {% for i in product %}
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3 product-item">
+                                    <div class="card product-card">
+                                        <div class="product-image-wrap">
+                                            <img src="{{ i.image.url }}" alt="{{ i.prod_name }}">
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h5 class="product-name" id="namepr{{ i.id }}">{{ i.prod_name }}</h5>
+
+                                            <p class="product-price">
+                                                ₹<span id="pricepr{{ i.id }}">{{ i.price }}</span>
+                                            </p>
+
+                                            <p class="product-desc">
+                                                {{ i.desc|slice:"0:65" }}...
+                                            </p>
+
+                                            <div class="btn-row">
+                                                <span id="divpr{{ i.id }}" class="divpr">
+                                                    <button id="pr{{ i.id }}" class="btn btn-primary btn-cart cart">
+                                                        Add to Cart
+                                                    </button>
+                                                </span>
+
+                                                <a href="/shop/products/{{ i.id }}">
+                                                    <button type="button" class="btn btn-view w-100">
+                                                        Quick View
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="row">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <a class="carousel-control-prev" href="#demo{{ forloop.counter }}" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </a>
+                <a class="carousel-control-next" href="#demo{{ forloop.counter }}" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {};
+
+    $('#popcart').popover({
+        trigger: 'click',
+        html: true,
+        sanitize: false,
+        title: 'Shopping Cart'
+    });
+
+    $('#popcart').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).popover('toggle');
+    });
+
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#popcart, .popover').length) {
+            $('#popcart').popover('hide');
+        }
+    });
+
+    $('.divpr').on('click', 'button.cart', function() {
+        let idstr = this.id.toString();
+
+        if (cart[idstr] !== undefined) {
+            cart[idstr][0] += 1;
+        } else {
+            let qty = 1;
+            let name = document.getElementById('name' + idstr).innerHTML;
+            let price = document.getElementById('price' + idstr).innerHTML;
+            cart[idstr] = [qty, name, price];
+        }
+
+        updateCart(cart);
+    });
+
+    $('.divpr').on('click', 'button.minus', function() {
+        let a = this.id.slice(7);
+
+        if (cart['pr' + a] !== undefined) {
+            cart['pr' + a][0] -= 1;
+            cart['pr' + a][0] = Math.max(0, cart['pr' + a][0]);
+
+            if (cart['pr' + a][0] === 0) {
+                delete cart['pr' + a];
+                document.getElementById('divpr' + a).innerHTML =
+                    `<button id="pr${a}" class="btn btn-primary btn-cart cart">Add to Cart</button>`;
+            } else {
+                document.getElementById('valpr' + a).innerHTML = cart['pr' + a][0];
+            }
+            updateCart(cart);
+        }
+    });
+
+    $('.divpr').on('click', 'button.plus', function() {
+        let a = this.id.slice(6);
+
+        if (cart['pr' + a] !== undefined) {
+            cart['pr' + a][0] += 1;
+            document.getElementById('valpr' + a).innerHTML = cart['pr' + a][0];
+            updateCart(cart);
+        }
+    });
+
+    function updatePopover(cart) {
+        let popStr = "<div class='my-2'>";
+        let i = 1;
+
+        for (let item in cart) {
+            popStr += `
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <b>${i}.</b> ${cart[item][1].slice(0, 22)}...
+                    </div>
+                    <div><b>x${cart[item][0]}</b></div>
+                </div>
+            `;
+            i++;
+        }
+
+        if (i === 1) {
+            popStr += `<div class="empty-cart-text">Your cart is empty.</div>`;
+        }
+
+        popStr += "</div>";
+        popStr += `
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <a href="/shop/checkout/" class="mr-2">
+                    <button class="btn btn-primary btn-sm">Checkout</button>
+                </a>
+                <button class="btn btn-outline-danger btn-sm" onclick="clearCart()">Clear Cart</button>
+            </div>
+        `;
+
+        $('#popcart').attr('data-content', popStr);
+    }
+
+    function updateCart(cart) {
+        let sum = 0;
+
+        for (let item in cart) {
+            sum += cart[item][0];
+            let itemId = item.slice(2);
+            let target = document.getElementById('divpr' + itemId);
+
+            if (target) {
+                target.innerHTML = `
+                    <div class="qty-box">
+                        <button id="minuspr${itemId}" class="btn btn-outline-primary minus">−</button>
+                        <span id="valpr${itemId}" class="qty-count">${cart[item][0]}</span>
+                        <button id="pluspr${itemId}" class="btn btn-outline-primary plus">+</button>
+                    </div>
+                `;
+            }
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        if (document.getElementById('cart')) {
+            document.getElementById('cart').innerHTML = sum;
+        }
+
+        updatePopover(cart);
+    }
+
+    function clearCart() {
+        for (let item in cart) {
+            let itemId = item.slice(2);
+            let target = document.getElementById('divpr' + itemId);
+
+            if (target) {
+                target.innerHTML = `
+                    <button id="pr${itemId}" class="btn btn-primary btn-cart cart">Add to Cart</button>
+                `;
+            }
+        }
+
+        cart = {};
+        localStorage.removeItem('cart');
+
+        if (document.getElementById('cart')) {
+            document.getElementById('cart').innerHTML = 0;
+        }
+
+        updatePopover(cart);
+        $('#popcart').popover('hide');
+    }
+
+    updateCart(cart);
+</script>
+{% endblock %}

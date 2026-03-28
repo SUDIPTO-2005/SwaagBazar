@@ -1,0 +1,250 @@
+{% extends 'shop/basic.html' %}
+{% block title %}About Us{% endblock %}
+
+{% block css %}
+<style>
+
+/* 🔥 Animated Logo */
+.logo-animated {
+    font-size: 2.6rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff6a00, #ffcc00, #28a745, #0d6efd);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 4s ease infinite;
+}
+
+.logo-animated:hover {
+    text-shadow: 0 0 12px rgba(255, 106, 0, 0.6);
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Hero Section */
+.about-hero {
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.about-hero p {
+    font-size: 1.1rem;
+    max-width: 750px;
+    margin: 15px auto 25px;
+    line-height: 1.7;
+}
+
+.about-hero .btn {
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-weight: 600;
+}
+
+/* Sections */
+.about-section {
+    padding: 60px 0;
+    background: #f8f9fa;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background: #0d6efd;
+    display: block;
+    margin: 8px auto 0;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #6c757d;
+    max-width: 750px;
+    margin: 0 auto 35px;
+}
+
+/* Cards */
+.info-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    height: 100%;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.info-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.info-card h3 {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+/* Features */
+.feature-section {
+    padding: 60px 0;
+}
+
+.feature-box {
+    text-align: center;
+    padding: 20px;
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    background: #e9f2ff;
+    color: #0d6efd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    font-size: 1.8rem;
+    transition: 0.3s;
+}
+
+.feature-box:hover .feature-icon {
+    transform: scale(1.1);
+}
+
+/* Footer */
+.footer-note {
+    background: #212529;
+    color: white;
+    text-align: center;
+    padding: 18px;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .logo-animated {
+        font-size: 1.8rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .about-hero p {
+        font-size: 1rem;
+    }
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+<main>
+
+<!-- 🔥 HERO -->
+<section class="about-hero">
+    <div class="container">
+
+        <h1>
+            Welcome to <br>
+            <span class="logo-animated">🛒 SwaagBazar</span>
+        </h1>
+
+        <p>
+            Your trusted online shopping destination for quality products,
+            affordable prices, and a seamless shopping experience.
+        </p>
+
+        <a class="btn btn-light" href="/shop/">Start Shopping</a>
+    </div>
+</section>
+
+<!-- 🧾 ABOUT -->
+<section class="about-section">
+    <div class="container">
+
+        <h2 class="section-title">Who We Are</h2>
+
+        <p class="section-subtitle">
+            We make online shopping simple, secure, and convenient.
+        </p>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="info-card">
+                    <h3>Our Mission</h3>
+                    <p>Deliver high-quality products at the best prices.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="info-card">
+                    <h3>Our Vision</h3>
+                    <p>Become a trusted global ecommerce brand.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="info-card">
+                    <h3>Why Choose Us</h3>
+                    <p>Fast delivery, secure payments, smooth experience.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ⚡ FEATURES -->
+<section class="feature-section">
+    <div class="container">
+
+        <h2 class="section-title">What We Offer</h2>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <div class="feature-box">
+                    <div class="feature-icon">✓</div>
+                    <h4>Quality Products</h4>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="feature-box">
+                    <div class="feature-icon">₹</div>
+                    <h4>Best Prices</h4>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="feature-box">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Fast Delivery</h4>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+</main>
+
+<footer class="footer-note">
+    &copy; 2026 SwaagBazar
+</footer>
+{% endblock %}
