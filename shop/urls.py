@@ -6,6 +6,7 @@ from django.urls import path, include
 from . import views
 urlpatterns = [
     path('',views.index,name='ShopHome'),
+    path("load-data/", views.load_shop_data, name="load_data"),
     path('about/',views.about,name='about'),
     path('contact/',views.contact,name='Contact'),
     path('tracker/',views.tracker,name='TrackingStatus'),

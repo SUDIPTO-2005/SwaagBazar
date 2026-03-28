@@ -28,7 +28,13 @@ from .models import Product
 
 def index(request):
     return HttpResponse(f"Product count = {Product.objects.count()}")
+from django.http import HttpResponse
+from django.core.management import call_command
+from .models import Product
 
+def load_shop_data(request):
+    call_command("loaddata", "shop_data.json")
+    return HttpResponse(f"Loaded. Product count = {Product.objects.count()}")
 def searchMatch(query, item):
     if query in item.prod_name.lower or query in item.category.lower:
         return True
