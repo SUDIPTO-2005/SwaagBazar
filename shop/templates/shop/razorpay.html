@@ -332,30 +332,49 @@
 
     <script>
         var options = {
-            "key": "{{ razorpay_key_id }}",
-            "amount": "{{ amount }}",
-            "currency": "{{ currency }}",
-            "name": "SwaagBazar",
-            "description": "Order Payment",
-            "order_id": "{{ razorpay_order_id }}",
-            "callback_url": "http://127.0.0.1:8000/shop/handlerequest/",
-            "redirect": true,
-            "prefill": {
-                "name": "{{ order.name }}",
-                "email": "{{ order.email }}",
-                "contact": "{{ order.phone }}"
+    "key": "{{ razorpay_key_id }}",
+    "amount": "{{ amount }}",
+    "currency": "{{ currency }}",
+    "name": "SwaagBazar",
+    "description": "Order Payment",
+    "order_id": "{{ razorpay_order_id }}",
+
+    // ❌ REMOVE redirect
+    // "redirect": true,
+
+    // ✅ USE HANDLER
+    "handler": function (response) {
+        console.log(response);
+
+        // Send data to Django manually
+        fetch("/shop/handlerequest/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            "theme": {
-                "color": "rgb(52, 58, 64)"
-            }
-        };
+            body: new URLSearchParams({
+                "razorpay_payment_id": response.razorpay_payment_id,
+                "razorpay_order_id": response.razorpay_order_id,
+                "razorpay_signature": response.razorpay_signature
+            })
+        })
+        .then(res => res.text())
+        .then(data => {
+            // Redirect after success
+            window.location.href = "/shop/";
+        });
+    },
 
-        var rzp1 = new Razorpay(options);
+    "prefill": {
+        "name": "{{ order.name }}",
+        "email": "{{ order.email }}",
+        "contact": "{{ order.phone }}"
+    },
 
-        document.getElementById("rzp-button1").onclick = function(e) {
-            e.preventDefault();
-            rzp1.open();
-        };
+    "theme": {
+        "color": "rgb(52, 58, 64)"
+    }
+};
     </script>
 
 </body>
