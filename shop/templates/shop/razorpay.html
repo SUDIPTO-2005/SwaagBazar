@@ -330,17 +330,20 @@
         </div>
     </div>
 
-    <script>
-    var options = {
-        "key": "{{ razorpay_key_id }}",
-        "amount": "{{ amount }}",
-        "currency": "{{ currency }}",
-        "name": "SwaagBazar",
-        "description": "Order Payment",
-        "order_id": "{{ razorpay_order_id }}",
+ <script>
+    console.log("Razorpay Key:", "{{ razorpay_key_id }}");
+    console.log("Razorpay Order ID:", "{{ razorpay_order_id }}");
+    console.log("Amount:", "{{ amount }}");
 
-        // ✅ IMPORTANT: handler instead of redirect
-        "handler": function (response) {
+    var options = {
+        key: "{{ razorpay_key_id }}",
+        amount: "{{ amount }}",
+        currency: "{{ currency }}",
+        name: "SwaagBazar",
+        description: "Order Payment",
+        order_id: "{{ razorpay_order_id }}",
+
+        handler: function (response) {
             console.log("Payment Success:", response);
 
             fetch("/shop/handlerequest/", {
@@ -349,40 +352,56 @@
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
                 body: new URLSearchParams({
-                    "razorpay_payment_id": response.razorpay_payment_id,
-                    "razorpay_order_id": response.razorpay_order_id,
-                    "razorpay_signature": response.razorpay_signature
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature
                 })
             })
-            .then(res => res.text())
-            .then(data => {
-                console.log(data);
-                alert("Payment Successful ✅");
+            .then(function (res) {
+                return res.text();
+            })
+            .then(function (data) {
+                console.log("Server Response:", data);
                 window.location.href = "/shop/";
             })
-            .catch(err => {
-                console.error(err);
-                alert("Payment processed but error occurred");
+            .catch(function (err) {
+                console.error("Fetch Error:", err);
+                alert("Payment succeeded, but there was an error updating the order.");
             });
         },
 
-        "prefill": {
-            "name": "{{ order.name }}",
-            "email": "{{ order.email }}",
-            "contact": "{{ order.phone }}"
+        modal: {
+            ondismiss: function () {
+                console.log("Payment popup closed");
+            }
         },
 
-        "theme": {
-            "color": "rgb(52, 58, 64)"
+        prefill: {
+            name: "{{ order.name }}",
+            email: "{{ order.email }}",
+            contact: "{{ order.phone }}"
+        },
+
+        notes: {
+            order_db_id: "{{ order.ord_id }}"
+        },
+
+        theme: {
+            color: "#343a40"
         }
     };
 
     var rzp1 = new Razorpay(options);
 
-    document.getElementById("rzp-button1").onclick = function(e) {
+    rzp1.on("payment.failed", function (response) {
+        console.error("Payment Failed:", response.error);
+        alert("Payment failed: " + response.error.description);
+    });
+
+    document.getElementById("rzp-button1").addEventListener("click", function (e) {
         e.preventDefault();
-        rzp1.open();   // 🔥 THIS LINE IS IMPORTANT
-    };
+        rzp1.open();
+    });
 </script>
 </body>
 </html>
