@@ -14,9 +14,10 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-fallback-secret-key")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    ".vercel.app",
     "127.0.0.1",
     "localhost",
+    ".onrender.com",
+    "swaagbazar-2.onrender.com",
 ]
 
 # Application definition
