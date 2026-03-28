@@ -20,6 +20,10 @@ ALLOWED_HOSTS = [
     "swaagbazar-2.onrender.com",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://swaagbazar-2.onrender.com",
+]
+
 # Application definition
 INSTALLED_APPS = [
     'shop.apps.ShopConfig',
