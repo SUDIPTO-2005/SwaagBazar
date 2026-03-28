@@ -12,16 +12,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-fallback-secret-key")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
-
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     ".onrender.com",
-    "swaagbazar-2.onrender.com",
+    "swaagbazar1-0.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://swaagbazar-2.onrender.com",
+    "https://swaagbazar1-0.onrender.com",
 ]
 
 # Application definition
