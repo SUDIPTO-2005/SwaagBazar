@@ -33,8 +33,12 @@ from django.core.management import call_command
 from .models import Product
 
 def load_shop_data(request):
-    call_command("loaddata", "shop_data.json")
-    return HttpResponse(f"Loaded. Product count = {Product.objects.count()}")
+    try:
+        call_command("loaddata", "shop_data.json", verbosity=2)
+        return HttpResponse(f"Loaded. Count = {Product.objects.count()}")
+    except Exception as e:
+        return HttpResponse(f"ERROR: {str(e)}")
+    
 def searchMatch(query, item):
     if query in item.prod_name.lower or query in item.category.lower:
         return True
