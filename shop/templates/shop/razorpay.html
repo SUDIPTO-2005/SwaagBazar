@@ -333,6 +333,10 @@
  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
+    console.log("KEY:", "{{ razorpay_key_id }}");
+    console.log("ORDER ID:", "{{ razorpay_order_id }}");
+    console.log("AMOUNT:", "{{ amount }}");
+
     var options = {
         key: "{{ razorpay_key_id }}",
         amount: "{{ amount }}",
@@ -357,8 +361,6 @@
                 return res.json();
             })
             .then(function (data) {
-                console.log("Server Response:", data);
-
                 if (data.status === "success") {
                     alert("Payment Successful ✅");
                     window.location.href = "/shop/";
@@ -367,7 +369,7 @@
                 }
             })
             .catch(function (err) {
-                console.error("Fetch Error:", err);
+                console.error(err);
                 alert("Payment could not be verified.");
             });
         },
