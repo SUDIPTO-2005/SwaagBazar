@@ -7,6 +7,7 @@ from django.conf import settings
 import razorpay
 import json
 from math import ceil
+from django.http import JsonResponse
 
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
@@ -194,19 +195,18 @@ def checkout(request):
 #             return HttpResponse("Error: " + str(e))
 
 #     return HttpResponse("Invalid request method")
+
+@csrf_exempt
 def handlerequest(request):
     if request.method != "POST":
-        return HttpResponse("Invalid request method")
-
-    print("PAYMENTHANDLER CALLED")
-    print("POST DATA:", request.POST)
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
 
     razorpay_payment_id = request.POST.get("razorpay_payment_id")
     razorpay_order_id = request.POST.get("razorpay_order_id")
     razorpay_signature = request.POST.get("razorpay_signature")
 
     if not razorpay_payment_id or not razorpay_order_id or not razorpay_signature:
-        return HttpResponse("Missing payment data")
+        return JsonResponse({"status": "error", "message": "Missing payment data"}, status=400)
 
     params_dict = {
         "razorpay_order_id": razorpay_order_id,
@@ -215,23 +215,17 @@ def handlerequest(request):
     }
 
     try:
-        # Verify payment signature
         client.utility.verify_payment_signature(params_dict)
 
-        # Find order
         order = Orders.objects.get(razorpay_order_id=razorpay_order_id)
-
-        # Update payment details
         order.razorpay_payment_id = razorpay_payment_id
         order.razorpay_signature = razorpay_signature
         order.paid = True
         order.save()
 
-        # Save order update
         update = orderupdate(order_id=order.ord_id, update_desc="Payment successful")
         update.save()
 
-        # Send confirmation email, but do not break payment flow if email fails
         try:
             send_mail(
                 subject="Order Placed",
@@ -248,14 +242,18 @@ Thank you for shopping with us!""",
         except Exception as mail_error:
             print("EMAIL ERROR:", str(mail_error))
 
-        return render(request, "shop/paymentstatus.html", {"order": order, "status": "success"})
+        return JsonResponse({
+            "status": "success",
+            "message": "Payment verified successfully",
+            "order_id": order.ord_id
+        })
 
     except Orders.DoesNotExist:
-        return HttpResponse("Order not found")
+        return JsonResponse({"status": "error", "message": "Order not found"}, status=404)
 
     except razorpay.errors.SignatureVerificationError:
-        return HttpResponse("Signature verification failed")
+        return JsonResponse({"status": "error", "message": "Signature verification failed"}, status=400)
 
     except Exception as e:
         print("ERROR:", str(e))
-        return HttpResponse("Error: " + str(e))
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)

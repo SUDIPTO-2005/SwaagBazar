@@ -330,11 +330,9 @@
         </div>
     </div>
 
- <script>
-    console.log("Razorpay Key:", "{{ razorpay_key_id }}");
-    console.log("Razorpay Order ID:", "{{ razorpay_order_id }}");
-    console.log("Amount:", "{{ amount }}");
+ <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+<script>
     var options = {
         key: "{{ razorpay_key_id }}",
         amount: "{{ amount }}",
@@ -344,8 +342,6 @@
         order_id: "{{ razorpay_order_id }}",
 
         handler: function (response) {
-            console.log("Payment Success:", response);
-
             fetch("/shop/handlerequest/", {
                 method: "POST",
                 headers: {
@@ -358,15 +354,21 @@
                 })
             })
             .then(function (res) {
-                return res.text();
+                return res.json();
             })
             .then(function (data) {
                 console.log("Server Response:", data);
-                window.location.href = "/shop/";
+
+                if (data.status === "success") {
+                    alert("Payment Successful ✅");
+                    window.location.href = "/shop/";
+                } else {
+                    alert("Payment verification failed: " + data.message);
+                }
             })
             .catch(function (err) {
                 console.error("Fetch Error:", err);
-                alert("Payment succeeded, but there was an error updating the order.");
+                alert("Payment could not be verified.");
             });
         },
 
@@ -380,10 +382,6 @@
             name: "{{ order.name }}",
             email: "{{ order.email }}",
             contact: "{{ order.phone }}"
-        },
-
-        notes: {
-            order_db_id: "{{ order.ord_id }}"
         },
 
         theme: {
