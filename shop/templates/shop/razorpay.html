@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Payment</title>
+    <title>Secure Payment | SwaagBazar</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -30,59 +28,9 @@
             align-items: center;
             gap: 10px;
             text-decoration: none;
-        }
-
-        .cart-icon {
-            font-size: 28px;
-            display: inline-block;
-            animation: cartBounce 1.8s infinite ease-in-out;
-            transform-origin: center;
-        }
-
-        .logo-shine {
+            color: white;
             font-size: 26px;
             font-weight: 800;
-            position: relative;
-            display: inline-block;
-            background: linear-gradient(90deg, #ff6a00, #ffcc00, #28a745, #0d6efd);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientMove 3s linear infinite;
-        }
-
-        .logo-shine::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -75%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                120deg,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.65) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            transform: skewX(-25deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        @keyframes shine {
-            0% { left: -75%; }
-            100% { left: 125%; }
-        }
-
-        @keyframes cartBounce {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-2px) rotate(-6deg); }
-            50% { transform: translateY(-5px) rotate(4deg); }
-            75% { transform: translateY(-2px) rotate(-3deg); }
         }
 
         .container {
@@ -95,27 +43,19 @@
             align-items: flex-start;
         }
 
-        .left-box,
-        .right-box {
+        .left-box, .right-box {
             background: white;
             padding: 24px;
             border-radius: 14px;
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
         }
 
-        .left-box {
-            flex: 2;
-        }
-
-        .right-box {
-            flex: 1;
-            height: fit-content;
-        }
+        .left-box { flex: 2; }
+        .right-box { flex: 1; }
 
         .section-title {
             font-size: 20px;
             margin-bottom: 20px;
-            color: #212121;
             border-bottom: 1px solid #e5e5e5;
             padding-bottom: 10px;
             font-weight: 700;
@@ -126,7 +66,6 @@
             font-size: 16px;
             color: #444;
             word-break: break-word;
-            line-height: 1.5;
         }
 
         .label {
@@ -145,7 +84,6 @@
             color: #388e3c;
             font-weight: bold;
             margin: 18px 0 22px;
-            line-height: 1.2;
         }
 
         #rzp-button1 {
@@ -158,250 +96,147 @@
             cursor: pointer;
             border-radius: 10px;
             font-weight: bold;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        #rzp-button1:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(251, 100, 27, 0.28);
+        #rzp-button1:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         .small-text {
             color: #777;
             font-size: 14px;
             margin-top: 12px;
+        }
+
+        #statusBox {
+            display: none;
+            margin-top: 14px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
             line-height: 1.5;
+            white-space: pre-line;
         }
 
-        @media (max-width: 991.98px) {
-            .container {
-                max-width: 900px;
-            }
-
-            .logo-shine {
-                font-size: 23px;
-            }
-
-            .cart-icon {
-                font-size: 24px;
-            }
-
-            .section-title {
-                font-size: 18px;
-            }
-
-            .amount {
-                font-size: 28px;
-            }
+        .info {
+            display: block !important;
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            color: #0d47a1;
         }
 
-        @media (max-width: 767.98px) {
-            .container {
-                flex-direction: column;
-                margin: 20px auto;
-                padding: 0 12px;
-            }
-
-            .left-box,
-            .right-box {
-                width: 100%;
-                padding: 18px;
-            }
-
-            .navbar {
-                padding: 12px 15px;
-            }
-
-            .logo-shine {
-                font-size: 21px;
-            }
-
-            .cart-icon {
-                font-size: 22px;
-            }
-
-            .section-title {
-                font-size: 17px;
-                margin-bottom: 16px;
-            }
-
-            .info-row {
-                font-size: 15px;
-                margin-bottom: 12px;
-            }
-
-            .amount {
-                font-size: 26px;
-                margin: 16px 0 18px;
-            }
-
-            #rzp-button1 {
-                font-size: 16px;
-                padding: 13px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                margin: 15px auto;
-            }
-
-            .left-box,
-            .right-box {
-                padding: 16px;
-                border-radius: 10px;
-            }
-
-            .logo-shine {
-                font-size: 18px;
-            }
-
-            .cart-icon {
-                font-size: 20px;
-            }
-
-            .section-title {
-                font-size: 16px;
-            }
-
-            .info-row {
-                font-size: 14px;
-            }
-
-            .amount-label {
-                font-size: 14px;
-            }
-
-            .amount {
-                font-size: 24px;
-            }
-
-            #rzp-button1 {
-                font-size: 15px;
-                padding: 12px;
-                border-radius: 8px;
-            }
-
-            .small-text {
-                font-size: 13px;
-            }
+        .error {
+            display: block !important;
+            background: #ffebee;
+            border: 1px solid #ef9a9a;
+            color: #b71c1c;
         }
     </style>
 </head>
 <body>
-
     <div class="navbar">
-        <a href="#" class="brand">
-            <span class="cart-icon">🛒</span>
-            <span class="logo-shine">SwaagBazar</span>
-        </a>
+        <a href="#" class="brand">🛒 SwaagBazar</a>
     </div>
 
     <div class="container">
         <div class="left-box">
             <div class="section-title">Order Details</div>
-
-            <div class="info-row">
-                <span class="label">Customer Name:</span> {{ order.name }}
-            </div>
-
-            <div class="info-row">
-                <span class="label">Email:</span> {{ order.email }}
-            </div>
-
-            <div class="info-row">
-                <span class="label">Phone:</span> {{ order.phone }}
-            </div>
-
-            <div class="info-row">
-                <span class="label">Payment For:</span> Order Payment
-            </div>
+            <div class="info-row"><span class="label">Customer Name:</span> {{ order.name }}</div>
+            <div class="info-row"><span class="label">Email:</span> {{ order.email }}</div>
+            <div class="info-row"><span class="label">Phone:</span> {{ order.phone }}</div>
+            <div class="info-row"><span class="label">Order ID:</span> {{ order.ord_id }}</div>
         </div>
 
         <div class="right-box">
             <div class="section-title">Price Details</div>
-
             <div class="amount-label">Total Amount</div>
             <div class="amount">₹ {{ order.amount }}</div>
 
             <button id="rzp-button1" type="button">Proceed to Pay</button>
-
             <p class="small-text">Safe and secure payments powered by Razorpay.</p>
+            <div id="statusBox"></div>
         </div>
     </div>
 
- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const payBtn = document.getElementById("rzp-button1");
+        const statusBox = document.getElementById("statusBox");
 
-<script>
-    console.log("KEY:", "{{ razorpay_key_id }}");
-    console.log("ORDER ID:", "{{ razorpay_order_id }}");
-    console.log("AMOUNT:", "{{ amount }}");
-
-    var options = {
-        key: "{{ razorpay_key_id }}",
-        amount: "{{ amount }}",
-        currency: "{{ currency }}",
-        name: "SwaagBazar",
-        description: "Order Payment",
-        order_id: "{{ razorpay_order_id }}",
-
-        handler: function (response) {
-            fetch("/shop/handlerequest/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: new URLSearchParams({
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_signature: response.razorpay_signature
-                })
-            })
-            .then(function (res) {
-                return res.json();
-            })
-            .then(function (data) {
-                if (data.status === "success") {
-                    alert("Payment Successful ✅");
-                    window.location.href = "/shop/";
-                } else {
-                    alert("Payment verification failed: " + data.message);
-                }
-            })
-            .catch(function (err) {
-                console.error(err);
-                alert("Payment could not be verified.");
-            });
-        },
-
-        modal: {
-            ondismiss: function () {
-                console.log("Payment popup closed");
-            }
-        },
-
-        prefill: {
-            name: "{{ order.name }}",
-            email: "{{ order.email }}",
-            contact: "{{ order.phone }}"
-        },
-
-        theme: {
-            color: "#343a40"
+        function showStatus(message, type) {
+            statusBox.className = "";
+            statusBox.classList.add(type);
+            statusBox.innerText = message;
         }
-    };
 
-    var rzp1 = new Razorpay(options);
+        const options = {
+            key: "{{ razorpay_key_id|escapejs }}",
+            amount: "{{ amount|escapejs }}",
+            currency: "{{ currency|escapejs }}",
+            name: "SwaagBazar",
+            description: "Order Payment",
+            order_id: "{{ razorpay_order_id|escapejs }}",
 
-    rzp1.on("payment.failed", function (response) {
-        console.error("Payment Failed:", response.error);
-        alert("Payment failed: " + response.error.description);
-    });
+            callback_url: "/shop/handlerequest/",
+            redirect: true,
 
-    document.getElementById("rzp-button1").addEventListener("click", function (e) {
-        e.preventDefault();
-        rzp1.open();
-    });
-</script>
+            prefill: {
+                name: "{{ order.name|default:''|escapejs }}",
+                email: "{{ order.email|default:''|escapejs }}",
+                contact: "{{ order.phone|default:''|escapejs }}"
+            },
+
+            modal: {
+                ondismiss: function () {
+                    showStatus("Payment popup was closed.", "error");
+                    payBtn.disabled = false;
+                }
+            },
+
+            theme: {
+                color: "#343a40"
+            }
+        };
+
+        console.log("key =", options.key);
+        console.log("order_id =", options.order_id);
+        console.log("amount =", options.amount);
+        console.log("currency =", options.currency);
+
+        let rzp;
+        try {
+            rzp = new Razorpay(options);
+        } catch (e) {
+            console.error("RAZORPAY INIT ERROR:", e);
+            showStatus("Razorpay initialization failed.", "error");
+            throw e;
+        }
+
+        rzp.on("payment.failed", function (response) {
+            console.error("PAYMENT FAILED:", response);
+
+            let msg = "Payment failed. Please use another method.";
+            if (response && response.error && response.error.description) {
+                msg = response.error.description;
+            }
+
+            showStatus(msg, "error");
+            payBtn.disabled = false;
+        });
+
+        payBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            payBtn.disabled = true;
+            showStatus("Opening Razorpay popup...", "info");
+
+            try {
+                rzp.open();
+            } catch (err) {
+                console.error("RZP OPEN ERROR:", err);
+                showStatus("Could not open Razorpay popup.", "error");
+                payBtn.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>

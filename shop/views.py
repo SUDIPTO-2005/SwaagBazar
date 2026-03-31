@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import Product, Contact, Orders, orderupdate
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
@@ -138,7 +138,6 @@ def checkout(request):
     return render(request, "shop/checkout.html")
 
 
-@csrf_exempt
 # def handlerequest(request):
 #     if request.method == "POST":
 #         print("PAYMENTHANDLER CALLED")
@@ -198,15 +197,24 @@ def checkout(request):
 
 @csrf_exempt
 def handlerequest(request):
+    print("HANDLEREQUEST CALLED")
+    print("METHOD:", request.method)
+    print("POST DATA:", request.POST)
+
     if request.method != "POST":
-        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
+        return redirect("/shop/payment-failed/")
 
     razorpay_payment_id = request.POST.get("razorpay_payment_id")
     razorpay_order_id = request.POST.get("razorpay_order_id")
     razorpay_signature = request.POST.get("razorpay_signature")
 
+    print("payment_id:", razorpay_payment_id)
+    print("order_id:", razorpay_order_id)
+    print("signature:", razorpay_signature)
+
     if not razorpay_payment_id or not razorpay_order_id or not razorpay_signature:
-        return JsonResponse({"status": "error", "message": "Missing payment data"}, status=400)
+        print("Missing payment data")
+        return redirect("/shop/payment-failed/")
 
     params_dict = {
         "razorpay_order_id": razorpay_order_id,
@@ -216,20 +224,25 @@ def handlerequest(request):
 
     try:
         client.utility.verify_payment_signature(params_dict)
+        print("SIGNATURE VERIFIED")
 
         order = Orders.objects.get(razorpay_order_id=razorpay_order_id)
+        print("ORDER FOUND:", order.ord_id)
+
         order.razorpay_payment_id = razorpay_payment_id
         order.razorpay_signature = razorpay_signature
         order.paid = True
         order.save()
 
-        update = orderupdate(order_id=order.ord_id, update_desc="Payment successful")
-        update.save()
+        orderupdate.objects.create(
+            order_id=order.ord_id,
+            update_desc="Payment successful"
+        )
 
         try:
             send_mail(
-                subject="Order Placed",
-                message=f"""Your order has been successfully placed and payment received.
+                subject="Order Placed Successfully",
+                message=f"""Your payment was successful.
 
 Order ID: {order.ord_id}
 Amount: ₹{order.amount}
@@ -237,23 +250,38 @@ Amount: ₹{order.amount}
 Thank you for shopping with us!""",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[order.email],
-                fail_silently=False,
+                fail_silently=True,
             )
         except Exception as mail_error:
             print("EMAIL ERROR:", str(mail_error))
 
-        return JsonResponse({
-            "status": "success",
-            "message": "Payment verified successfully",
-            "order_id": order.ord_id
-        })
+        return redirect(f"/shop/payment-success/?order_id={order.ord_id}")
 
     except Orders.DoesNotExist:
-        return JsonResponse({"status": "error", "message": "Order not found"}, status=404)
+        print("ORDER NOT FOUND")
+        return redirect("/shop/payment-failed/")
 
-    except razorpay.errors.SignatureVerificationError:
-        return JsonResponse({"status": "error", "message": "Signature verification failed"}, status=400)
+    except razorpay.errors.SignatureVerificationError as e:
+        print("SIGNATURE ERROR:", str(e))
+        return redirect("/shop/payment-failed/")
 
     except Exception as e:
-        print("ERROR:", str(e))
-        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+        print("GENERAL ERROR:", str(e))
+        return redirect("/shop/payment-failed/")
+
+
+def payment_success(request):
+    order_id = request.GET.get("order_id")
+    order = None
+
+    if order_id:
+        try:
+            order = Orders.objects.get(ord_id=order_id)
+        except Orders.DoesNotExist:
+            order = None
+
+    return render(request, "shop/payment_success.html", {"order": order})
+
+
+def payment_failed(request):
+    return render(request, "shop/payment_failed.html")

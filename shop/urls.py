@@ -13,6 +13,8 @@ urlpatterns = [
     path('products/<int:myid>',views.prodview,name='Productview'),
     path('checkout/',views.checkout,name='Checkout'),
     path('handlerequest/',views.handlerequest,name='HandleRequest'),
+    path("payment-success/", views.payment_success, name="payment_success"),
+    path('payment-failed/', views.payment_failed, name='payment_failed'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

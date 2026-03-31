@@ -123,7 +123,7 @@ EMAIL_HOST_PASSWORD =  'lybijkptoacrcxt'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Razorpay
-RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_SUnKFDCQypDGWt')
-RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'Fxwkki8c6MevfZrnASZ14D5S')
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_SXtP9KvbWOpXzx')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'mvinQf9Nff5WgvH1Hl2Baf7i')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
